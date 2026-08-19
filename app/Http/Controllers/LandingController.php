@@ -32,14 +32,17 @@ class LandingController extends Controller
             'kesediaan-docx' => [
                 'path' => public_path('templates/Template_Surat_Kesediaan_Mengajar.docx'),
                 'name' => 'Template Surat Kesediaan Mengajar UPT PJJ.docx',
+                'headers' => ['Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
             ],
             'kesediaan-pdf' => [
                 'path' => public_path('templates/Template_Surat_Kesediaan_Mengajar.pdf'),
                 'name' => 'Template Surat Kesediaan Mengajar UPT PJJ.pdf',
+                'headers' => ['Content-Type' => 'application/pdf'],
             ],
             'pakta-pdf' => [
                 'path' => public_path('templates/Template_Pakta_Integritas.pdf'),
                 'name' => 'Template Pakta Integritas Calon Tutor.pdf',
+                'headers' => ['Content-Type' => 'application/pdf'],
             ],
         ];
 
@@ -47,6 +50,7 @@ class LandingController extends Controller
             abort(404, 'File template tidak ditemukan.');
         }
 
-        return response()->download($templates[$type]['path'], $templates[$type]['name']);
+        $item = $templates[$type];
+        return response()->download($item['path'], $item['name'], $item['headers'] ?? []);
     }
 }
