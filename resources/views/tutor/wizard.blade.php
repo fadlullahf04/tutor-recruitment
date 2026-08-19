@@ -450,6 +450,13 @@
                                     @if($inputInfo['required'] && !$existingFile)
                                         <span style="color: var(--color-danger);">*</span>
                                     @endif
+                                    @if($field === 'file_surat_kesediaan')
+                                        <span style="display: block; font-size: 0.75rem; font-weight: normal; margin-top: 0.2rem;">
+                                            Template: 
+                                            <a href="{{ route('template.download', 'kesediaan-docx') }}" style="color: var(--color-primary); font-weight: 600;">Unduh Word (.docx)</a> | 
+                                            <a href="{{ route('template.download', 'kesediaan-pdf') }}" style="color: var(--color-danger); font-weight: 600;">PDF</a>
+                                        </span>
+                                    @endif
                                 </span>
                                 @if($existingFile)
                                     <span style="color: var(--color-success); font-size: 0.8rem; font-weight: 600; white-space: nowrap;"><i class="fa-solid fa-circle-check"></i> Unggah Ok</span>

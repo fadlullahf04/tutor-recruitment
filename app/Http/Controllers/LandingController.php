@@ -19,4 +19,34 @@ class LandingController extends Controller
 
         return view('landing', compact('activePeriod'));
     }
+
+    /**
+     * Download template files.
+     *
+     * @param string $type
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function downloadTemplate($type)
+    {
+        $templates = [
+            'kesediaan-docx' => [
+                'path' => public_path('templates/Template_Surat_Kesediaan_Mengajar.docx'),
+                'name' => 'Template Surat Kesediaan Mengajar UPT PJJ.docx',
+            ],
+            'kesediaan-pdf' => [
+                'path' => public_path('templates/Template_Surat_Kesediaan_Mengajar.pdf'),
+                'name' => 'Template Surat Kesediaan Mengajar UPT PJJ.pdf',
+            ],
+            'pakta-pdf' => [
+                'path' => public_path('templates/Template_Pakta_Integritas.pdf'),
+                'name' => 'Template Pakta Integritas Calon Tutor.pdf',
+            ],
+        ];
+
+        if (!isset($templates[$type]) || !file_exists($templates[$type]['path'])) {
+            abort(404, 'File template tidak ditemukan.');
+        }
+
+        return response()->download($templates[$type]['path'], $templates[$type]['name']);
+    }
 }

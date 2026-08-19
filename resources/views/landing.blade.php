@@ -304,14 +304,14 @@
                     </p>
                     <div class="template-meta">
                         <span><i class="fa-solid fa-file-pdf" style="color: var(--color-danger);"></i> PDF (209 KB)</span>
-                        <span><i class="fa-solid fa-file-word" style="color: #2b579a;"></i> DOCX (3.5 MB)</span>
+                        <span><i class="fa-solid fa-file-word" style="color: #2b579a;"></i> Word (3.5 MB)</span>
                     </div>
                     <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                        <a href="{{ asset('templates/Template_Surat_Kesediaan_Mengajar.pdf') }}" class="btn btn-outline" download style="padding: 0.5rem 1rem; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem;">
+                        <a href="{{ route('template.download', 'kesediaan-pdf') }}" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem;">
                             <i class="fa-solid fa-cloud-arrow-down"></i> Unduh PDF
                         </a>
-                        <a href="{{ asset('templates/Template_Surat_Kesediaan_Mengajar.docx') }}" class="btn btn-outline" download style="padding: 0.5rem 1rem; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem;">
-                            <i class="fa-solid fa-cloud-arrow-down"></i> Unduh DOCX
+                        <a href="{{ route('template.download', 'kesediaan-docx') }}" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem;">
+                            <i class="fa-solid fa-file-word"></i> Unduh Word (DOCX)
                         </a>
                     </div>
                 </div>
@@ -331,7 +331,7 @@
                         <span><i class="fa-solid fa-file-pdf" style="color: var(--color-danger);"></i> PDF</span>
                         <span><i class="fa-solid fa-weight-hanging"></i> 611 B</span>
                     </div>
-                    <a href="{{ asset('templates/Template_Pakta_Integritas.pdf') }}" class="btn btn-outline" download style="padding: 0.5rem 1rem; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem;">
+                    <a href="{{ route('template.download', 'pakta-pdf') }}" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem;">
                         <i class="fa-solid fa-cloud-arrow-down"></i> Unduh File
                     </a>
                 </div>

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 
 // Home Landing Page Route
 Route::get('/', [LandingController::class, 'index'])->name('home');
+Route::get('/template/download/{type}', [LandingController::class, 'downloadTemplate'])->name('template.download');
 
 // Guest Auth Routes
 Route::middleware('guest')->group(function () {
