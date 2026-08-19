@@ -30,7 +30,6 @@
                 <li><a href="#home" class="nav-link active">Home</a></li>
                 <li><a href="#alur" class="nav-link">Alur Rekrutmen</a></li>
                 <li><a href="#pengumuman" class="nav-link">Pengumuman</a></li>
-                <li><a href="#template" class="nav-link">Unduh Template</a></li>
             </ul>
             
             <div class="nav-actions">
@@ -283,62 +282,6 @@
         </div>
     </section>
 
-    <!-- Unduh Template Section -->
-    <section id="template" class="landing-section">
-        <div class="section-header">
-            <span class="section-subtitle">Unduh Berkas</span>
-            <h2 class="section-title">File Template Surat Persyaratan</h2>
-            <p class="section-desc">Unduh berkas pernyataan di bawah ini, isi data secara lengkap, lalu tanda tangani sebelum diunggah ke sistem.</p>
-        </div>
-        
-        <div class="template-grid">
-            <!-- Surat Kesediaan Mengajar -->
-            <div class="template-card">
-                <div class="template-icon">
-                    <i class="fa-solid fa-file-signature"></i>
-                </div>
-                <div class="template-info">
-                    <h4 class="template-title">Surat Kesediaan Mengajar UPT PJJ</h4>
-                    <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 1rem; line-height: 1.5;">
-                        Draf surat pernyataan resmi menyatakan kesanggupan mengajar mata kuliah PJJ UIN Siber Cirebon sesuai jadwal akademik.
-                    </p>
-                    <div class="template-meta">
-                        <span><i class="fa-solid fa-file-pdf" style="color: var(--color-danger);"></i> PDF (209 KB)</span>
-                        <span><i class="fa-solid fa-file-word" style="color: #2b579a;"></i> Word (3.5 MB)</span>
-                    </div>
-                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                        <a href="{{ route('template.download', 'kesediaan-pdf') }}" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem;">
-                            <i class="fa-solid fa-cloud-arrow-down"></i> Unduh PDF
-                        </a>
-                        <a href="{{ route('template.download', 'kesediaan-docx') }}" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem;">
-                            <i class="fa-solid fa-file-word"></i> Unduh Word (DOCX)
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Pakta Integritas -->
-            <div class="template-card">
-                <div class="template-icon" style="background-color: var(--color-primary-light); color: var(--color-primary);">
-                    <i class="fa-solid fa-shield-check"></i>
-                </div>
-                <div class="template-info">
-                    <h4 class="template-title">Pakta Integritas Calon Tutor</h4>
-                    <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 1rem; line-height: 1.5;">
-                        Pernyataan integritas moral, komitmen pelaksanaan tugas pembelajaran online, serta bebas dari narkoba dan tuntutan hukum.
-                    </p>
-                    <div class="template-meta">
-                        <span><i class="fa-solid fa-file-pdf" style="color: var(--color-danger);"></i> PDF</span>
-                        <span><i class="fa-solid fa-weight-hanging"></i> 611 B</span>
-                    </div>
-                    <a href="{{ route('template.download', 'pakta-pdf') }}" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem;">
-                        <i class="fa-solid fa-cloud-arrow-down"></i> Unduh File
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Footer -->
     <footer class="landing-footer">
         <div class="footer-container">
@@ -367,7 +310,6 @@
                     <li class="footer-link"><a href="#home">Home</a></li>
                     <li class="footer-link"><a href="#alur">Alur Rekrutmen</a></li>
                     <li class="footer-link"><a href="#pengumuman">Pengumuman</a></li>
-                    <li class="footer-link"><a href="#template">Unduh Template</a></li>
                 </ul>
             </div>
             
