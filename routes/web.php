@@ -53,6 +53,7 @@ Route::middleware('auth')->group(function () {
         
         // Candidate Tutor Review
         Route::get('/tutors', [AdminController::class, 'tutorIndex'])->name('tutors.index');
+        Route::get('/tutors/export', [AdminController::class, 'tutorExport'])->name('tutors.export');
         Route::get('/tutors/create', [AdminController::class, 'tutorCreate'])->middleware('role:super_admin')->name('tutors.create');
         Route::get('/tutors/{id}', [AdminController::class, 'tutorShow'])->name('tutors.show');
         Route::post('/tutors/{id}/approve', [AdminController::class, 'tutorApprove'])->name('tutors.approve');

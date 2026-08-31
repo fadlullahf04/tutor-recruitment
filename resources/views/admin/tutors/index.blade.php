@@ -53,11 +53,16 @@
     <div class="card">
         <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
             <h3 class="card-title"><i class="fa-solid fa-list-ul"></i> Hasil Penyaringan Pendaftar</h3>
-            @if(Auth::user()->isSuperAdmin())
-                <a href="{{ route('admin.tutors.create') }}" class="btn btn-primary btn-sm">
-                    <i class="fa-solid fa-user-plus"></i> Tambah Calon Tutor Baru
+            <div style="display: flex; gap: 0.5rem;">
+                <a href="{{ route('admin.tutors.export') }}" class="btn btn-outline btn-sm" style="color: #16a34a; border-color: #16a34a; font-weight: 600; padding: 0.5rem 1rem;">
+                    <i class="fa-solid fa-file-excel"></i> Export Excel
                 </a>
-            @endif
+                @if(Auth::user()->isSuperAdmin())
+                    <a href="{{ route('admin.tutors.create') }}" class="btn btn-primary btn-sm" style="padding: 0.5rem 1rem;">
+                        <i class="fa-solid fa-user-plus"></i> Tambah Calon Tutor Baru
+                    </a>
+                @endif
+            </div>
         </div>
         <div class="card-body" style="padding: 0;">
             <div class="table-responsive">

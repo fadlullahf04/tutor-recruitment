@@ -82,6 +82,188 @@ class AdminController extends Controller
     }
 
     /**
+     * Export all candidate tutors to an Excel-compatible XLSX spreadsheet.
+     */
+    public function tutorExport()
+    {
+        $tutors = TutorProfile::with(['user', 'period', 'courses.studyProgram.faculty'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Data Calon Tutor');
+
+        // Headers
+        $headers = [
+            'No. Registrasi',
+            'NIK',
+            'NIP',
+            'NIDN',
+            'NUPTK',
+            'NPWP',
+            'Nama Lengkap & Gelar',
+            'Email',
+            'Jenis Kelamin',
+            'No. HP',
+            'Tanggal Lahir',
+            'Alamat',
+            'Pendidikan Terakhir',
+            'Universitas',
+            'Program Studi Asal',
+            'Tahun Lulus',
+            'Bidang Keahlian',
+            'Instansi Asal',
+            'Status Pekerjaan',
+            'Masa Kerja',
+            'Bidang Pekerjaan',
+            'Golongan',
+            'Pilihan Fakultas',
+            'Pilihan Program Studi',
+            'Pilihan Mata Kuliah',
+            'Bank',
+            'No. Rekening',
+            'Nama Pemilik Rekening',
+            'Status Verifikasi',
+            'Alasan Ditolak / Catatan Revisi',
+            'Tanggal Daftar'
+        ];
+
+        // 1. Populate headers in row 1
+        $col = 'A';
+        foreach ($headers as $headerText) {
+            $sheet->setCellValue($col . '1', $headerText);
+            $col++;
+        }
+
+        // 2. Populate data rows
+        $row = 2;
+        foreach ($tutors as $tutor) {
+            $course = $tutor->courses->first();
+            $studyProgram = $course ? $course->studyProgram : null;
+            $faculty = $studyProgram ? $studyProgram->faculty : null;
+
+            $data = [
+                $tutor->registration_number ?: '-',
+                $tutor->nik ?: '-',
+                $tutor->nip ?: '-',
+                $tutor->nidn ?: '-',
+                $tutor->nuptk ?: '-',
+                $tutor->npwp ?: '-',
+                $tutor->full_name_with_titles ?: '-',
+                $tutor->user ? $tutor->user->email : '-',
+                $tutor->gender ?: '-',
+                $tutor->phone ?: '-',
+                $tutor->date_of_birth ? \Carbon\Carbon::parse($tutor->date_of_birth)->format('Y-m-d') : '-',
+                $tutor->address ?: '-',
+                $tutor->last_education ?: '-',
+                $tutor->university_name ?: '-',
+                $tutor->field_of_study ?: '-',
+                $tutor->graduation_year ?: '-',
+                $tutor->field_of_expertise ?: '-',
+                $tutor->institution_name ?: '-',
+                $tutor->employment_status ?: '-',
+                $tutor->work_duration ?: '-',
+                $tutor->work_field ?: '-',
+                $tutor->rank_group ?: '-',
+                $faculty ? $faculty->name : '-',
+                $studyProgram ? $studyProgram->name : '-',
+                $course ? $course->code . ' - ' . $course->name : '-',
+                $tutor->bank_name ?: '-',
+                $tutor->bank_account_number ?: '-',
+                $tutor->bank_account_name ?: '-',
+                $tutor->status ?: '-',
+                $tutor->rejection_reason ?: '-',
+                $tutor->created_at ? $tutor->created_at->format('Y-m-d H:i:s') : '-'
+            ];
+
+            $col = 'A';
+            foreach ($data as $index => $value) {
+                // Explicitly bind long numeric identity strings (NIK, NIP, NIDN, NUPTK, NPWP, phone, and account numbers) as TYPE_STRING
+                if (in_array($index, [1, 2, 3, 4, 5, 9, 26])) {
+                    $sheet->setCellValueExplicit($col . $row, $value, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                } else {
+                    $sheet->setCellValue($col . $row, $value);
+                }
+                $col++;
+            }
+            $row++;
+        }
+
+        // 3. Apply cell styling
+        $highestColumn = $sheet->getHighestColumn();
+        $highestRow = $sheet->getHighestRow();
+
+        $headerRange = 'A1:' . $highestColumn . '1';
+        $fullRange = 'A1:' . $highestColumn . $highestRow;
+
+        // Custom green color matching application (emerald green)
+        $sheet->getStyle($headerRange)->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+                'size' => 11,
+                'name' => 'Inter'
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '059669']
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
+            ]
+        ]);
+
+        // Border styling
+        $sheet->getStyle($fullRange)->applyFromArray([
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['rgb' => 'CBD5E1'] // slate-200
+                ]
+            ],
+            'font' => [
+                'size' => 10,
+                'name' => 'Inter'
+            ]
+        ]);
+
+        // Adjust dimensions
+        $sheet->getRowDimension(1)->setRowHeight(35);
+        for ($r = 2; $r <= $highestRow; $r++) {
+            $sheet->getRowDimension($r)->setRowHeight(25);
+            $sheet->getStyle('A' . $r . ':' . $highestColumn . $r)->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+        }
+
+        // Enable auto-filter
+        $sheet->setAutoFilter($headerRange);
+
+        // Auto column sizing
+        $colIterator = $sheet->getColumnIterator();
+        foreach ($colIterator as $column) {
+            $sheet->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
+        }
+
+        // Output file stream
+        $fileName = 'Data_Calon_Tutor_' . date('Ymd_His') . '.xlsx';
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+
+        return response()->stream(
+            function () use ($writer) {
+                $writer->save('php://output');
+            },
+            200,
+            [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+                'Cache-Control' => 'max-age=0',
+                'Pragma' => 'no-cache'
+            ]
+        );
+    }
+
+    /**
      * View specific tutor details for review.
      */
     public function tutorShow($id)
@@ -105,12 +287,14 @@ class AdminController extends Controller
         $tutor->load('courses.studyProgram.faculty');
 
         try {
+            Log::info("Mengirim email persetujuan ke {$tutor->user->email}...");
             Mail::to($tutor->user->email)->send(new TutorApprovedMail($tutor));
-        } catch (\Exception $e) {
-            Log::error("Gagal mengirim email persetujuan ke {$tutor->user->email}: " . $e->getMessage());
+            Log::info("Email persetujuan berhasil dikirim ke {$tutor->user->email}");
+        } catch (\Throwable $e) {
+            Log::error("Gagal mengirim email persetujuan ke {$tutor->user->email}: " . $e->getMessage() . "\n" . $e->getTraceAsString());
         }
 
-        return redirect()->back()
+        return redirect()->route('admin.tutors.show', $tutor->id)
             ->with('success', "Calon tutor {$tutor->full_name_with_titles} berhasil disetujui.");
     }
 
@@ -132,12 +316,14 @@ class AdminController extends Controller
         ]);
 
         try {
+            Log::info("Mengirim email penolakan ke {$tutor->user->email}...");
             Mail::to($tutor->user->email)->send(new TutorRejectedMail($tutor));
-        } catch (\Exception $e) {
-            Log::error("Gagal mengirim email penolakan ke {$tutor->user->email}: " . $e->getMessage());
+            Log::info("Email penolakan berhasil dikirim ke {$tutor->user->email}");
+        } catch (\Throwable $e) {
+            Log::error("Gagal mengirim email penolakan ke {$tutor->user->email}: " . $e->getMessage() . "\n" . $e->getTraceAsString());
         }
 
-        return redirect()->back()
+        return redirect()->route('admin.tutors.show', $tutor->id)
             ->with('success', "Calon tutor {$tutor->full_name_with_titles} ditolak dengan alasan yang ditentukan.");
     }
 
@@ -358,9 +544,11 @@ class AdminController extends Controller
 
         // Send email with credentials
         try {
+            Log::info("Mengirim email registrasi ke {$user->email}...");
             Mail::to($user->email)->send(new TutorRegisteredMail($user, $rawPassword, $request->nik));
-        } catch (\Exception $e) {
-            Log::error("Gagal mengirim email registrasi ke {$user->email}: " . $e->getMessage());
+            Log::info("Email registrasi berhasil dikirim ke {$user->email}");
+        } catch (\Throwable $e) {
+            Log::error("Gagal mengirim email registrasi ke {$user->email}: " . $e->getMessage() . "\n" . $e->getTraceAsString());
         }
 
         return redirect()->route('admin.tutors.index')

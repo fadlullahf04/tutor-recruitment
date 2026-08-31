@@ -355,4 +355,23 @@ class TutorRegistrationFlowTest extends TestCase
                    $mail->tutor->rejection_reason === 'Dokumen transkrip nilai tidak terbaca.';
         });
     }
+
+    public function test_admin_can_export_tutors_to_excel()
+    {
+        $admin = User::create([
+            'name' => 'Admin PJJ',
+            'email' => 'admin_export@uinsi.ac.id',
+            'password' => bcrypt('password123'),
+            'role' => 'admin'
+        ]);
+
+        $this->actingAs($admin);
+
+        $response = $this->get(route('admin.tutors.export'));
+        
+        $response->assertStatus(200);
+        $response->assertHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $this->assertStringContainsString('Data_Calon_Tutor_', $response->headers->get('Content-Disposition'));
+        $this->assertStringEndsWith('.xlsx"', $response->headers->get('Content-Disposition'));
+    }
 }

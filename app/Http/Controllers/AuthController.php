@@ -157,9 +157,11 @@ class AuthController extends Controller
 
         // Send email with credentials (wrapped in try-catch to prevent 500 error if SMTP is not fully configured)
         try {
+            Log::info("Mengirim email registrasi ke {$user->email}...");
             Mail::to($user->email)->send(new TutorRegisteredMail($user, $rawPassword, $request->nik));
-        } catch (\Exception $e) {
-            Log::error("Gagal mengirim email registrasi ke {$user->email}: " . $e->getMessage());
+            Log::info("Email registrasi berhasil dikirim ke {$user->email}");
+        } catch (\Throwable $e) {
+            Log::error("Gagal mengirim email registrasi ke {$user->email}: " . $e->getMessage() . "\n" . $e->getTraceAsString());
         }
 
         // Flash temporary credentials for verification
@@ -215,9 +217,11 @@ class AuthController extends Controller
 
         // Send reset password email (wrapped in try-catch to prevent 500 error if SMTP is not fully configured)
         try {
+            Log::info("Mengirim email reset password ke {$user->email}...");
             Mail::to($user->email)->send(new TutorResetPasswordMail($user, $rawPassword));
-        } catch (\Exception $e) {
-            Log::error("Gagal mengirim email reset password ke {$user->email}: " . $e->getMessage());
+            Log::info("Email reset password berhasil dikirim ke {$user->email}");
+        } catch (\Throwable $e) {
+            Log::error("Gagal mengirim email reset password ke {$user->email}: " . $e->getMessage() . "\n" . $e->getTraceAsString());
         }
 
         return redirect()->route('login')->with('success_reset', "Password telah direset. Silakan cek email Anda (Simulasi Password Baru: {$rawPassword})");

@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Rekrutmen Tutor Online UPT PJJ - UIN Siber Cirebon</title>
+    <title>Rekrutmen Tutor Online UPT PJJ - UIN Siber Syekh Nurjati Cirebon</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     
     <!-- Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -21,8 +22,8 @@
             <div class="nav-brand">
                 <img src="{{ asset('images/logo.png') }}" alt="Logo UINSSC" class="nav-logo">
                 <div class="nav-title">
-                    UPT PJJ
-                    <span>UIN Siber Cirebon</span>
+                    UPT Pendidikan Jarak Jauh
+                    <span>UIN Siber Syekh Nurjati Cirebon</span>
                 </div>
             </div>
             
@@ -63,10 +64,10 @@
                     <i class="fa-solid fa-graduation-cap"></i> Penerimaan Tutor Online UPT PJJ
                 </div>
                 <h1 class="hero-title">
-                    Bergabung Sebagai <span>Tutor Online</span> UIN Siber Cirebon
+                    Bergabung Sebagai <span>Tutor Online</span> UPT PJJ UIN SSC
                 </h1>
                 <p class="hero-description">
-                    Mari berkontribusi membangun universitas Islam siber pertama di Indonesia. Kembangkan karir mengajar Anda secara fleksibel melalui Unit Pelaksana Teknis Pembelajaran Jarak Jauh (UPT PJJ) UIN Siber Cirebon.
+                    Mari berkontribusi membangun universitas Islam siber pertama di Indonesia. Kembangkan karir mengajar Anda secara fleksibel melalui Unit Pelaksana Teknis Pendidikan Jarak Jauh (UPT PJJ) UIN Siber Syekh Nurjati Cirebon.
                 </p>
                 <div class="hero-buttons">
                     @auth
@@ -121,7 +122,7 @@
                     UPT PJJ UIN Siber Cirebon
                 </h3>
                 <p style="color: var(--color-text-muted); line-height: 1.7; font-size: 0.95rem;">
-                    Unit Pelaksana Teknis Pembelajaran Jarak Jauh (UPT PJJ) UIN Siber Syekh Nurjati Cirebon merupakan pionir sekaligus pusat pengembangan keilmuan Islam berbasis digital di bawah Kementerian Agama RI. Kami berkomitmen untuk menyelenggarakan pendidikan tinggi berkualitas tanpa batas ruang dan waktu.
+                    Unit Pelaksana Teknis Pendidikan Jarak Jauh (UPT PJJ) UIN Siber Syekh Nurjati Cirebon merupakan pionir sekaligus pusat pengembangan keilmuan Islam berbasis digital di bawah Kementerian Agama RI. Kami berkomitmen untuk menyelenggarakan pendidikan tinggi berkualitas tanpa batas ruang dan waktu.
                 </p>
                 <p style="color: var(--color-text-muted); line-height: 1.7; font-size: 0.95rem;">
                     Untuk mendukung keberhasilan e-learning, kami membuka kesempatan emas bagi dosen dan praktisi terbaik di seluruh Indonesia untuk bergabung sebagai tutor online guna mendampingi mahasiswa dalam berdiskusi, memberikan materi, serta mengevaluasi pembelajaran secara digital.
@@ -278,6 +279,8 @@
                         <i class="fa-solid fa-circle-info"></i> Silakan periksa kembali halaman ini secara berkala untuk pengumuman jadwal seleksi berikutnya.
                     </div>
                 @endif
+
+
             </div>
         </div>
     </section>
@@ -289,8 +292,8 @@
                 <div class="footer-info-logo">
                     <img src="{{ asset('images/logo.png') }}" alt="Logo UINSSC" class="footer-logo">
                     <div class="footer-brand">
-                        UPT PJJ
-                        <span>UIN Siber Cirebon</span>
+                        UPT Pendidikan Jarak Jauh
+                        <span>UIN Siber Syekh Nurjati Cirebon</span>
                     </div>
                 </div>
                 <p class="footer-desc">
