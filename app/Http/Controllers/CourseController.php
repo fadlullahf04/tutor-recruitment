@@ -14,7 +14,7 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::with('studyProgram.faculty')->orderBy('code')->get();
+        $courses = Course::with('studyProgram.faculty')->orderBy('semester')->orderBy('code')->get();
         $programs = StudyProgram::orderBy('name')->get();
         return view('admin.master.courses', compact('courses', 'programs'));
     }
@@ -28,16 +28,18 @@ class CourseController extends Controller
             'study_program_id' => 'required|exists:study_programs,id',
             'code' => 'required|string|max:50|unique:courses,code',
             'name' => 'required|string|max:255',
-            'credits' => 'required|integer|min:1|max:10'
+            'credits' => 'required|integer|min:1|max:10',
+            'semester' => 'required|integer|min:1|max:14',
         ], [
             'study_program_id.required' => 'Program studi wajib dipilih.',
             'code.required' => 'Kode mata kuliah wajib diisi.',
             'code.unique' => 'Kode mata kuliah sudah terdaftar.',
             'name.required' => 'Nama mata kuliah wajib diisi.',
             'credits.required' => 'Jumlah SKS wajib diisi.',
+            'semester.required' => 'Semester wajib diisi.',
         ]);
 
-        Course::create($request->only('study_program_id', 'code', 'name', 'credits'));
+        Course::create($request->only('study_program_id', 'code', 'name', 'credits', 'semester'));
 
         return redirect()->route('admin.master.courses.index')
             ->with('success', 'Mata Kuliah berhasil ditambahkan.');
@@ -46,24 +48,26 @@ class CourseController extends Controller
     /**
      * Update a course.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $idmk)
     {
-        $course = Course::findOrFail($id);
+        $course = Course::findOrFail($idmk);
 
         $request->validate([
             'study_program_id' => 'required|exists:study_programs,id',
-            'code' => "required|string|max:50|unique:courses,code,{$course->id}",
+            'code' => "required|string|max:50|unique:courses,code,{$course->idmk},idmk",
             'name' => 'required|string|max:255',
-            'credits' => 'required|integer|min:1|max:10'
+            'credits' => 'required|integer|min:1|max:10',
+            'semester' => 'required|integer|min:1|max:14',
         ], [
             'study_program_id.required' => 'Program studi wajib dipilih.',
             'code.required' => 'Kode mata kuliah wajib diisi.',
             'code.unique' => 'Kode mata kuliah sudah terdaftar.',
             'name.required' => 'Nama mata kuliah wajib diisi.',
             'credits.required' => 'Jumlah SKS wajib diisi.',
+            'semester.required' => 'Semester wajib diisi.',
         ]);
 
-        $course->update($request->only('study_program_id', 'code', 'name', 'credits'));
+        $course->update($request->only('study_program_id', 'code', 'name', 'credits', 'semester'));
 
         return redirect()->route('admin.master.courses.index')
             ->with('success', 'Mata Kuliah berhasil diperbarui.');
@@ -72,13 +76,13 @@ class CourseController extends Controller
     /**
      * Destroy a course.
      */
-    public function destroy($id)
+    public function destroy($idmk)
     {
         if (!Auth::user()->isSuperAdmin()) {
             abort(403, 'Hanya Super Admin yang dapat menghapus data.');
         }
 
-        $course = Course::findOrFail($id);
+        $course = Course::findOrFail($idmk);
         $course->delete();
 
         return redirect()->route('admin.master.courses.index')

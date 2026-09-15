@@ -342,7 +342,7 @@
             <!-- STEP 4: PILIH MATA KULIAH -->
             @php
                 $selectedCourse = $profile->courses->first();
-                $selectedCourseId = $selectedCourse ? $selectedCourse->id : null;
+                $selectedCourseId = $selectedCourse ? $selectedCourse->idmk : null;
                 $selectedProgramId = $selectedCourse ? $selectedCourse->study_program_id : null;
                 $selectedFacultyId = null;
                 if ($selectedCourse && $selectedCourse->studyProgram) {
@@ -398,7 +398,7 @@
                             <i class="fa-solid fa-circle-check"></i>
                         </div>
                         <div style="font-size: 0.85rem;">
-                            <strong>Mata Kuliah Terpilih Saat Ini:</strong> {{ $selectedCourse->code }} - {{ $selectedCourse->name }} ({{ $selectedCourse->credits }} SKS)
+                            <strong>Mata Kuliah Terpilih Saat Ini:</strong> {{ $selectedCourse->code }} - {{ $selectedCourse->name }} (Semester {{ $selectedCourse->semester }} - {{ $selectedCourse->credits }} SKS)
                         </div>
                     </div>
                 @endif
@@ -560,8 +560,8 @@
                     if (selectedProg && selectedProg.courses) {
                         selectedProg.courses.forEach(course => {
                             const opt = document.createElement('option');
-                            opt.value = course.id;
-                            opt.textContent = `${course.code} - ${course.name} (${course.credits} SKS)`;
+                            opt.value = course.idmk;
+                            opt.textContent = `[Sem ${course.semester}] ${course.code} - ${course.name} (${course.credits} SKS)`;
                             courseSelect.appendChild(opt);
                         });
                         courseSelect.disabled = false;

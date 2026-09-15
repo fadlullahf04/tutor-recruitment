@@ -77,6 +77,6 @@ class TutorProfile extends Model
      */
     public function courses()
     {
-        return $this->belongsToMany(Course::class, 'tutor_courses', 'tutor_profile_id', 'course_id')->withTimestamps();
+        return $this->belongsToMany(Course::class, 'tutor_courses', 'tutor_profile_id', 'course_id', 'id', 'idmk')->withTimestamps();
     }
 }

@@ -283,7 +283,7 @@ class TutorWizardController extends Controller
         }
 
         $request->validate([
-            'course_id' => 'required|exists:courses,id'
+            'course_id' => 'required|exists:courses,idmk'
         ], [
             'course_id.required' => 'Anda wajib memilih salah satu mata kuliah yang ditawarkan.'
         ]);
@@ -463,7 +463,7 @@ class TutorWizardController extends Controller
         }
 
         $request->validate([
-            'course_id' => 'required|exists:courses,id'
+            'course_id' => 'required|exists:courses,idmk'
         ], [
             'course_id.required' => 'Anda wajib memilih salah satu mata kuliah yang ditawarkan.'
         ]);

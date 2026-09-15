@@ -7,7 +7,7 @@
 @section('content')
     @php
         $selectedCourse = $profile->courses->first();
-        $selectedCourseId = $selectedCourse ? $selectedCourse->id : null;
+        $selectedCourseId = $selectedCourse ? $selectedCourse->idmk : null;
         $selectedProgramId = $selectedCourse ? $selectedCourse->study_program_id : null;
         $selectedFacultyId = null;
         if ($selectedCourse && $selectedCourse->studyProgram) {
@@ -92,7 +92,7 @@
                         <span style="display: block; font-weight: 700; font-family: monospace; font-size: 0.85rem; color: var(--color-primary);">{{ $selectedCourse->code }}</span>
                         <span style="display: block; font-size: 1rem; font-weight: 600; color: #1e293b; line-height: 1.3; margin: 0.2rem 0;">{{ $selectedCourse->name }}</span>
                         <span style="display: block; font-size: 0.8rem; color: var(--color-text-muted);">
-                            SKS: {{ $selectedCourse->credits }} | {{ $selectedCourse->studyProgram ? $selectedCourse->studyProgram->name : '' }}
+                            Semester {{ $selectedCourse->semester }} | SKS: {{ $selectedCourse->credits }} | {{ $selectedCourse->studyProgram ? $selectedCourse->studyProgram->name : '' }}
                         </span>
                     </div>
                 </div>
@@ -141,8 +141,8 @@
                     if (selectedProg && selectedProg.courses) {
                         selectedProg.courses.forEach(course => {
                             const opt = document.createElement('option');
-                            opt.value = course.id;
-                            opt.textContent = `${course.code} - ${course.name} (${course.credits} SKS)`;
+                            opt.value = course.idmk;
+                            opt.textContent = `[Sem ${course.semester}] ${course.code} - ${course.name} (${course.credits} SKS)`;
                             courseSelect.appendChild(opt);
                         });
                         courseSelect.disabled = false;

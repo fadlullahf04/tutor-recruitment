@@ -292,10 +292,10 @@
                                     <i class="fa-solid fa-check-double"></i>
                                 </div>
                                 <div>
-                                    <span style="display: block; font-weight: 700; font-family: monospace; font-size: 0.8rem; color: var(--color-primary);">{{ $course->code }}</span>
+                                    <span style="display: block; font-weight: 700; font-family: monospace; font-size: 0.8rem; color: var(--color-primary);">{{ $course->code }} ({{ $course->idmk }})</span>
                                     <span style="display: block; font-size: 0.9rem; font-weight: 600; color: #1e293b; line-height: 1.3;">{{ $course->name }}</span>
                                     <span style="display: block; font-size: 0.75rem; color: var(--color-text-muted); margin-top: 0.25rem;">
-                                        SKS: {{ $course->credits }} | {{ $course->studyProgram ? $course->studyProgram->name : '' }}
+                                        Semester {{ $course->semester }} | SKS: {{ $course->credits }} | {{ $course->studyProgram ? $course->studyProgram->name : '' }}
                                     </span>
                                 </div>
                             </div>

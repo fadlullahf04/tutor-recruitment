@@ -21,9 +21,11 @@
                 <table class="table">
                     <thead>
                         <tr>
+                            <th>ID MK</th>
                             <th>Kode MK</th>
                             <th>Nama Mata Kuliah</th>
                             <th>Program Studi / Fakultas</th>
+                            <th>Semester</th>
                             <th>SKS</th>
                             <th>Aksi</th>
                         </tr>
@@ -31,6 +33,7 @@
                     <tbody>
                         @forelse($courses as $course)
                             <tr>
+                                <td style="font-weight: 700; font-family: monospace; color: #475569;">{{ $course->idmk }}</td>
                                 <td style="font-weight: 700; font-family: monospace; color: var(--color-primary);">{{ $course->code }}</td>
                                 <td style="font-weight: 600;">{{ $course->name }}</td>
                                 <td>
@@ -41,14 +44,17 @@
                                         -
                                     @endif
                                 </td>
+                                <td>
+                                    <span class="badge" style="background-color: #f1f5f9; color: #334155; font-weight: 600;">Semester {{ $course->semester }}</span>
+                                </td>
                                 <td>{{ $course->credits }} SKS</td>
                                 <td>
                                     <div style="display: flex; gap: 0.5rem;">
-                                        <button type="button" class="btn btn-outline btn-sm" onclick="openEditCourseModal({{ $course->id }}, '{{ addslashes($course->code) }}', '{{ addslashes($course->name) }}', {{ $course->study_program_id }}, {{ $course->credits }})">
+                                        <button type="button" class="btn btn-outline btn-sm" onclick="openEditCourseModal('{{ addslashes($course->idmk) }}', '{{ addslashes($course->code) }}', '{{ addslashes($course->name) }}', {{ $course->study_program_id }}, {{ $course->credits }}, {{ $course->semester }})">
                                             Edit <i class="fa-solid fa-pen"></i>
                                         </button>
                                         @if(Auth::user()->isSuperAdmin())
-                                            <form action="{{ route('admin.master.courses.destroy', $course->id) }}" method="POST">
+                                            <form action="{{ route('admin.master.courses.destroy', $course->idmk) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus mata kuliah ini?');">
@@ -61,7 +67,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" style="text-align: center; color: var(--color-text-muted); padding: 3rem 0;">
+                                <td colspan="7" style="text-align: center; color: var(--color-text-muted); padding: 3rem 0;">
                                     Belum ada data mata kuliah. Silakan tambahkan baru.
                                 </td>
                             </tr>
@@ -99,9 +105,15 @@
                         <label for="name" class="form-label">Nama Mata Kuliah <span style="color: var(--color-danger);">*</span></label>
                         <input type="text" id="name" name="name" class="form-control" placeholder="Masukkan nama mata kuliah" required>
                     </div>
-                    <div class="form-group">
-                        <label for="credits" class="form-label">Jumlah SKS <span style="color: var(--color-danger);">*</span></label>
-                        <input type="number" id="credits" name="credits" class="form-control" min="1" max="10" placeholder="Contoh: 3" required>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label for="semester" class="form-label">Semester <span style="color: var(--color-danger);">*</span></label>
+                            <input type="number" id="semester" name="semester" class="form-control" min="1" max="14" value="1" placeholder="Contoh: 1" required>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label for="credits" class="form-label">Jumlah SKS <span style="color: var(--color-danger);">*</span></label>
+                            <input type="number" id="credits" name="credits" class="form-control" min="1" max="10" placeholder="Contoh: 3" required>
+                        </div>
                     </div>
                 </div>
                 <div class="card-footer" style="padding: 1rem 1.5rem; display: flex; justify-content: flex-end; gap: 0.75rem; border-top: 1px solid #e2e8f0; background-color: var(--color-bg-primary);">
@@ -139,9 +151,15 @@
                         <label for="edit_name" class="form-label">Nama Mata Kuliah <span style="color: var(--color-danger);">*</span></label>
                         <input type="text" id="edit_name" name="name" class="form-control" required>
                     </div>
-                    <div class="form-group">
-                        <label for="edit_credits" class="form-label">Jumlah SKS <span style="color: var(--color-danger);">*</span></label>
-                        <input type="number" id="edit_credits" name="credits" class="form-control" min="1" max="10" required>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label for="edit_semester" class="form-label">Semester <span style="color: var(--color-danger);">*</span></label>
+                            <input type="number" id="edit_semester" name="semester" class="form-control" min="1" max="14" required>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label for="edit_credits" class="form-label">Jumlah SKS <span style="color: var(--color-danger);">*</span></label>
+                            <input type="number" id="edit_credits" name="credits" class="form-control" min="1" max="10" required>
+                        </div>
                     </div>
                 </div>
                 <div class="card-footer" style="padding: 1rem 1.5rem; display: flex; justify-content: flex-end; gap: 0.75rem; border-top: 1px solid #e2e8f0; background-color: var(--color-bg-primary);">
@@ -163,11 +181,12 @@
             document.getElementById('add-course-modal').style.display = 'none';
         }
 
-        function openEditCourseModal(id, code, name, studyProgramId, credits) {
-            document.getElementById('edit-course-form').action = "{{ url('/admin/master/courses') }}/" + id;
+        function openEditCourseModal(idmk, code, name, studyProgramId, credits, semester) {
+            document.getElementById('edit-course-form').action = "{{ url('/admin/master/courses') }}/" + encodeURIComponent(idmk);
             document.getElementById('edit_code').value = code;
             document.getElementById('edit_name').value = name;
             document.getElementById('edit_study_program_id').value = studyProgramId;
+            document.getElementById('edit_semester').value = semester;
             document.getElementById('edit_credits').value = credits;
             document.getElementById('edit-course-modal').style.display = 'flex';
         }

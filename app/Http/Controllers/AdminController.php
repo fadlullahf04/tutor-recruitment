@@ -168,7 +168,7 @@ class AdminController extends Controller
                 $tutor->rank_group ?: '-',
                 $faculty ? $faculty->name : '-',
                 $studyProgram ? $studyProgram->name : '-',
-                $course ? $course->code . ' - ' . $course->name : '-',
+                $course ? "[Sem {$course->semester}] ({$course->idmk}) {$course->code} - {$course->name}" : '-',
                 $tutor->bank_name ?: '-',
                 $tutor->bank_account_number ?: '-',
                 $tutor->bank_account_name ?: '-',

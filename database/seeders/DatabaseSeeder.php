@@ -100,6 +100,7 @@ class DatabaseSeeder extends Seeder
                 'code' => 'PAI-101',
                 'name' => 'Sejarah Peradaban Islam',
                 'credits' => 3,
+                'semester' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -108,6 +109,7 @@ class DatabaseSeeder extends Seeder
                 'code' => 'PAI-102',
                 'name' => 'Filsafat Pendidikan Islam',
                 'credits' => 2,
+                'semester' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -116,10 +118,10 @@ class DatabaseSeeder extends Seeder
                 'code' => 'PAI-103',
                 'name' => 'Metodologi Penelitian PAI',
                 'credits' => 3,
+                'semester' => 3,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-           
         ]);
     }
 }

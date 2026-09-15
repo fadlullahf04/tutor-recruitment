@@ -6,7 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Course extends Model
 {
-    protected $fillable = ['study_program_id', 'code', 'name', 'credits'];
+    protected $primaryKey = 'idmk';
+
+    protected $fillable = [
+        'study_program_id',
+        'code',
+        'name',
+        'credits',
+        'semester',
+    ];
 
     /**
      * Get the study program that owns the course.

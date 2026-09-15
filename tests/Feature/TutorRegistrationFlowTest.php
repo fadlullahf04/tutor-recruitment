@@ -39,7 +39,8 @@ class TutorRegistrationFlowTest extends TestCase
             'study_program_id' => $program->id,
             'code' => 'PAI-101',
             'name' => 'Test Course',
-            'credits' => 3
+            'credits' => 3,
+            'semester' => 1,
         ]);
 
         // 2. Register user
@@ -103,7 +104,7 @@ class TutorRegistrationFlowTest extends TestCase
 
         // 6. Save Step 4 (Pilih Mata Kuliah)
         $response = $this->post(route('tutor.wizard.step4'), [
-            'course_id' => $course->id
+            'course_id' => $course->idmk
         ]);
         $response->assertRedirect(route('tutor.wizard', ['step' => 5]));
         $this->assertEquals(4, $profile->fresh()->completed_step);
@@ -260,7 +261,8 @@ class TutorRegistrationFlowTest extends TestCase
             'study_program_id' => $program->id,
             'code' => 'PAI-101',
             'name' => 'Test Course',
-            'credits' => 3
+            'credits' => 3,
+            'semester' => 1,
         ]);
 
         // Create admin user
@@ -286,7 +288,7 @@ class TutorRegistrationFlowTest extends TestCase
             'full_name_with_titles' => 'Calon Tutor',
             'completed_step' => 5
         ]);
-        $profile->courses()->attach($course->id);
+        $profile->courses()->attach($course->idmk);
 
         $this->actingAs($admin);
 
