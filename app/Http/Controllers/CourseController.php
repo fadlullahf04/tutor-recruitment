@@ -12,11 +12,47 @@ class CourseController extends Controller
     /**
      * Display courses.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $courses = Course::with('studyProgram.faculty')->orderBy('semester')->orderBy('code')->get();
+        $search = $request->get('search');
+        $sortBy = $request->get('sort_by', 'semester');
+        $sortDirection = strtolower($request->get('sort_direction', 'asc')) === 'desc' ? 'desc' : 'asc';
+
+        $query = Course::with('studyProgram.faculty');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('courses.code', 'like', "%{$search}%")
+                  ->orWhere('courses.name', 'like', "%{$search}%");
+            });
+        }
+
+        if (in_array($sortBy, ['study_program', 'program'])) {
+            $query->leftJoin('study_programs', 'courses.study_program_id', '=', 'study_programs.id')
+                  ->select('courses.*')
+                  ->orderBy('study_programs.name', $sortDirection)
+                  ->orderBy('courses.semester', 'asc')
+                  ->orderBy('courses.code', 'asc');
+        } elseif ($sortBy === 'semester') {
+            $query->orderBy('courses.semester', $sortDirection)
+                  ->orderBy('courses.code', 'asc');
+        } elseif ($sortBy === 'code') {
+            $query->orderBy('courses.code', $sortDirection);
+        } elseif ($sortBy === 'name') {
+            $query->orderBy('courses.name', $sortDirection);
+        } elseif ($sortBy === 'credits') {
+            $query->orderBy('courses.credits', $sortDirection);
+        } elseif ($sortBy === 'idmk') {
+            $query->orderBy('courses.idmk', $sortDirection);
+        } else {
+            $query->orderBy('courses.semester', 'asc')
+                  ->orderBy('courses.code', 'asc');
+        }
+
+        $courses = $query->paginate(10)->withQueryString();
         $programs = StudyProgram::orderBy('name')->get();
-        return view('admin.master.courses', compact('courses', 'programs'));
+
+        return view('admin.master.courses', compact('courses', 'programs', 'search', 'sortBy', 'sortDirection'));
     }
 
     /**
@@ -25,15 +61,14 @@ class CourseController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'study_program_id' => 'required|exists:study_programs,id',
-            'code' => 'required|string|max:50|unique:courses,code',
+            'study_program_id' => 'required|exists:study_programs,id|unique:courses,id',
+            'code' => 'required|string|max:50',
             'name' => 'required|string|max:255',
             'credits' => 'required|integer|min:1|max:10',
             'semester' => 'required|integer|min:1|max:14',
         ], [
             'study_program_id.required' => 'Program studi wajib dipilih.',
             'code.required' => 'Kode mata kuliah wajib diisi.',
-            'code.unique' => 'Kode mata kuliah sudah terdaftar.',
             'name.required' => 'Nama mata kuliah wajib diisi.',
             'credits.required' => 'Jumlah SKS wajib diisi.',
             'semester.required' => 'Semester wajib diisi.',
@@ -54,14 +89,13 @@ class CourseController extends Controller
 
         $request->validate([
             'study_program_id' => 'required|exists:study_programs,id',
-            'code' => "required|string|max:50|unique:courses,code,{$course->idmk},idmk",
+            'code' => 'required|string|max:50',
             'name' => 'required|string|max:255',
             'credits' => 'required|integer|min:1|max:10',
             'semester' => 'required|integer|min:1|max:14',
         ], [
             'study_program_id.required' => 'Program studi wajib dipilih.',
             'code.required' => 'Kode mata kuliah wajib diisi.',
-            'code.unique' => 'Kode mata kuliah sudah terdaftar.',
             'name.required' => 'Nama mata kuliah wajib diisi.',
             'credits.required' => 'Jumlah SKS wajib diisi.',
             'semester.required' => 'Semester wajib diisi.',
