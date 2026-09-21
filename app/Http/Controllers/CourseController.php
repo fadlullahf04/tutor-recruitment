@@ -61,7 +61,7 @@ class CourseController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'study_program_id' => 'required|exists:study_programs,id|unique:courses,id',
+            'study_program_id' => 'required|exists:study_programs,id',
             'code' => 'required|string|max:50',
             'name' => 'required|string|max:255',
             'credits' => 'required|integer|min:1|max:10',

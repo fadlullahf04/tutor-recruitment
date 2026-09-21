@@ -99,4 +99,38 @@ class CourseTest extends TestCase
         $response->assertRedirect(route('admin.master.courses.index'));
         $this->assertDatabaseCount('courses', 2);
     }
+
+    public function test_store_multiple_courses_in_same_program()
+    {
+        $admin = User::create([
+            'name' => 'Super Admin',
+            'email' => 'admin3@test.com',
+            'password' => 'secret123',
+            'role' => 'super_admin'
+        ]);
+
+        $faculty = Faculty::create(['name' => 'Fakultas Syariah']);
+        $program = StudyProgram::create(['faculty_id' => $faculty->id, 'name' => 'Hukum Islam']);
+
+        $response1 = $this->actingAs($admin)->post(route('admin.master.courses.store'), [
+            'study_program_id' => $program->id,
+            'code' => 'HK-101',
+            'name' => 'Pengantar Hukum Islam',
+            'credits' => 3,
+            'semester' => 1
+        ]);
+        $response1->assertRedirect(route('admin.master.courses.index'));
+
+        $response2 = $this->actingAs($admin)->post(route('admin.master.courses.store'), [
+            'study_program_id' => $program->id,
+            'code' => 'HK-102',
+            'name' => 'Ushul Fiqh',
+            'credits' => 3,
+            'semester' => 2
+        ]);
+        $response2->assertRedirect(route('admin.master.courses.index'));
+
+        $this->assertDatabaseCount('courses', 2);
+    }
 }
+
